@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-// Note: Mobile menu state would need client component which we can add later if needed.
-// For now, simple responsive design.
+import { Menu } from "lucide-react";
+import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 export function LandingNavbar() {
     return (
@@ -31,12 +30,26 @@ export function LandingNavbar() {
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="hidden md:flex items-center gap-4">
-                            <Button variant="ghost" size="sm">
-                                Sign In
-                            </Button>
-                            <Button size="sm">
-                                Get Started
-                            </Button>
+                            <SignedOut>
+                                <SignInButton mode="modal">
+                                    <Button variant="ghost" size="sm">
+                                        Sign In
+                                    </Button>
+                                </SignInButton>
+                                <SignInButton mode="modal">
+                                    <Button size="sm">
+                                        Get Started
+                                    </Button>
+                                </SignInButton>
+                            </SignedOut>
+                            <SignedIn>
+                                <Link href="/dashboard">
+                                    <Button variant="outline" size="sm" className="hidden sm:flex">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <UserButton />
+                            </SignedIn>
                         </div>
                         <div className="md:hidden">
                             <Button variant="ghost" size="icon">

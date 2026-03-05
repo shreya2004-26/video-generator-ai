@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export function LandingHero() {
     return (
@@ -26,9 +27,21 @@ export function LandingHero() {
                     </p>
 
                     <div className="mt-10 flex items-center justify-center gap-x-6 animate-in fade-in slide-in-from-bottom-6 duration-700 fill-mode-both delay-300">
-                        <Button size="lg" className="h-12 px-8 text-lg gap-2">
-                            Start Creating <ArrowRight className="h-5 w-5" />
-                        </Button>
+                        <SignedIn>
+                            <Link href="/dashboard">
+                                <Button size="lg" className="h-12 px-8 text-lg gap-2">
+                                    Go to Dashboard <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                        </SignedIn>
+                        <SignedOut>
+                            <SignInButton mode="modal">
+                                <Button size="lg" className="h-12 px-8 text-lg gap-2">
+                                    Start Creating <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            </SignInButton>
+                        </SignedOut>
+
                         <Button variant="outline" size="lg" className="h-12 px-8 text-lg gap-2">
                             <PlayCircle className="h-5 w-5" /> Watch Demo
                         </Button>
