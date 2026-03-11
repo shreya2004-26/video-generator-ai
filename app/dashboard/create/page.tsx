@@ -10,6 +10,8 @@ import { CaptionSelection } from "@/components/create/caption-selection"
 import { SeriesDetails } from "@/components/create/series-details"
 import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 const STEPS = [
     { id: 1, title: "Niche" },
@@ -21,13 +23,35 @@ const STEPS = [
 ]
 
 export default function CreateSeriesPage() {
+    const router = useRouter()
     const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState<any>({})
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleNextStep = () => {
+    const handleNextStep = async () => {
         if (currentStep === 6) {
-            console.log("Scheduling Series with Data: ", formData)
-            // Save logic here...
+            try {
+                setIsLoading(true)
+                const response = await fetch("/api/series", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                })
+
+                if (!response.ok) {
+                    throw new Error("Failed to schedule series")
+                }
+
+                toast.success("Series scheduled successfully!")
+                router.push("/dashboard")
+                router.refresh()
+            } catch (error) {
+                console.error(error)
+                toast.error("Something went wrong. Please try again.")
+                setIsLoading(false)
+            }
         } else {
             setCurrentStep((prev) => Math.min(prev + 1, 6))
         }
@@ -134,9 +158,9 @@ export default function CreateSeriesPage() {
                         size="lg"
                         className={currentStep === 6 ? "bg-primary text-primary-foreground font-bold hover:shadow-lg transition-all" : ""}
                         onClick={handleNextStep}
-                        disabled={!isStepValid()}
+                        disabled={!isStepValid() || isLoading}
                     >
-                        {currentStep === 6 ? "Schedule" : "Continue"}
+                        {isLoading ? "Scheduling..." : currentStep === 6 ? "Schedule" : "Continue"}
                     </Button>
                 </div>
             </div>
