@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:inngest": "npx inngest-cli@latest dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -11,6 +12,8 @@
   "dependencies": {
     "@base-ui/react": "^1.1.0",
     "@clerk/nextjs": "^6.37.3",
+    "@deepgram/sdk": "^5.0.0",
+    "@google/genai": "^1.44.0",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.94.0",
@@ -20,6 +23,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.35.0",
+    "inngest": "^3.52.6",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",

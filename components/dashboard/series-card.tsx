@@ -159,7 +159,29 @@ export function SeriesCard({ series, onUpdate }: SeriesCardProps) {
                         <Eye className="mr-1.5 h-3.5 w-3.5" />
                         View Past
                     </Button>
-                    <Button className="w-full text-xs h-9 font-semibold" size="sm">
+                    <Button
+                        onClick={async () => {
+                            try {
+                                setIsLoading(true);
+                                toast.loading("Starting video generation...", { id: "generate-" + series.id });
+
+                                const response = await fetch('/api/generate', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ seriesId: series.id })
+                                });
+
+                                if (!response.ok) throw new Error("Failed to start generation");
+                                toast.success("Video generation queued successfully!", { id: "generate-" + series.id });
+                            } catch (err) {
+                                toast.error("Failed to start generation.", { id: "generate-" + series.id });
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }}
+                        disabled={isLoading}
+                        className="w-full text-xs h-9 font-semibold" size="sm"
+                    >
                         <Video className="mr-1.5 h-3.5 w-3.5" />
                         Generate Now
                     </Button>
